@@ -34,20 +34,6 @@ class OnlineSalesRegisterCollector:
     def number_items(self):
         return self.__number_items
 
-    """
-    2. Добавь товар в чек
-Напиши метод add_item_to_cheque. Он добавляет товары в чек.
-В качестве аргумента метод принимает название товара — name.
-В теле метода напиши условия:
-Если в названии товара 0 или больше 40 символов, выводится исключение ValueError. 
-Оно печатает сообщение: 
-'Нельзя добавить товар, если в его названии нет символов или их больше 40'.
-Если названия товара нет в списке item_price, выводится исключение NameError с 
-текстом 'Позиция отсутствует в товарном справочнике'.
-В остальных случаях метод добавляет товар в name_items 
-и увеличивает значение number_items на 1.
-    """
-
     def add_item_to_cheque(self, name):
         if not len(name) or len(name) > MAX_NUMBER_LETTERS_IN_NAME:
             raise ValueError('Нельзя добавить товар, если в его '
@@ -57,7 +43,6 @@ class OnlineSalesRegisterCollector:
         
         self.__name_items.append(name)
         self.__number_items += 1
-        
 
 
 if __name__ == "__main__":
