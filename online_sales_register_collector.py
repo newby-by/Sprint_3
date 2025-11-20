@@ -156,10 +156,10 @@ if __name__ == "__main__":
     actual_total = register_collector_total_with_2_items_with_20.twenty_percent_tax_calculation()
     assert actual_total == (50 + 100) * VAT_TAX_20 / PERCENT_100
 
-    register_collector_total_with_2_items_with_20 = OnlineSalesRegisterCollector()
-    register_collector_total_with_2_items_with_20.add_item_to_cheque('кефир') # 70 10%
-    register_collector_total_with_2_items_with_20.add_item_to_cheque('кефир') # 70 10%
-    actual_total = register_collector_total_with_2_items_with_20.twenty_percent_tax_calculation()
+    register_collector_total_with_0_items_with_20 = OnlineSalesRegisterCollector()
+    register_collector_total_with_0_items_with_20.add_item_to_cheque('кефир') # 70 10%
+    register_collector_total_with_0_items_with_20.add_item_to_cheque('кефир') # 70 10%
+    actual_total = register_collector_total_with_0_items_with_20.twenty_percent_tax_calculation()
     assert actual_total == 0
 
     register_collector_total_with_11_items_with_20 = OnlineSalesRegisterCollector()
