@@ -6,6 +6,9 @@ MAX_NUMBER_LETTERS_IN_NAME = 40
 NUMBER_ITEMS_IN_CART_WITH_DISCOUNT = 10
 DISCOUNT = 0.9
 
+VAT_TAX = 20
+PERCENT_100 = 100
+
 
 class OnlineSalesRegisterCollector:
     """OnlineSalesRegisterCollector class."""
@@ -52,6 +55,19 @@ class OnlineSalesRegisterCollector:
         return (total * DISCOUNT 
                 if self.__number_items > NUMBER_ITEMS_IN_CART_WITH_DISCOUNT 
                 else total)
+
+    def twenty_percent_tax_calculation(self):
+        """Calculate VAT for goods with a rate of 20 percent."""
+
+        twenty_percent_tax = [item for item in self.__name_items 
+                              if self.__tax_rate.get(item, 0) == VAT_TAX]
+        total = sum([self.__item_price.get(item, 0) for item in twenty_percent_tax])
+        total_with_discount =  (total * DISCOUNT 
+                                if (self.__number_items > 
+                                    NUMBER_ITEMS_IN_CART_WITH_DISCOUNT )
+                                else total)
+
+        return total_with_discount * VAT_TAX / PERCENT_100
 
 
 if __name__ == "__main__":
@@ -107,3 +123,24 @@ if __name__ == "__main__":
      for i in range(11)] # 50
     actual_total = register_collector_total_with_11_items.check_amount()
     assert actual_total == (50 * 11) * DISCOUNT, f'{actual_total}'
+
+    # tests twenty_percent_tax_calculation
+    register_collector_total_with_2_items_with_20 = OnlineSalesRegisterCollector()
+    register_collector_total_with_2_items_with_20.add_item_to_cheque('чипсы') # 50 20%
+    register_collector_total_with_2_items_with_20.add_item_to_cheque('кола') # 100 20%
+    register_collector_total_with_2_items_with_20.add_item_to_cheque('кефир') # 70 10%
+    actual_total = register_collector_total_with_2_items_with_20.twenty_percent_tax_calculation()
+    assert actual_total == (50 + 100) * VAT_TAX / PERCENT_100
+
+    register_collector_total_with_2_items_with_20 = OnlineSalesRegisterCollector()
+    register_collector_total_with_2_items_with_20.add_item_to_cheque('кефир') # 70 10%
+    register_collector_total_with_2_items_with_20.add_item_to_cheque('кефир') # 70 10%
+    actual_total = register_collector_total_with_2_items_with_20.twenty_percent_tax_calculation()
+    assert actual_total == 0
+
+    register_collector_total_with_11_items_with_20 = OnlineSalesRegisterCollector()
+    [register_collector_total_with_11_items_with_20.add_item_to_cheque('чипсы') 
+     for i in range(11)] # 50
+    actual_total = register_collector_total_with_11_items_with_20.twenty_percent_tax_calculation()
+    assert actual_total == (50 * 11) * DISCOUNT * VAT_TAX / PERCENT_100, f'{actual_total}'
+
