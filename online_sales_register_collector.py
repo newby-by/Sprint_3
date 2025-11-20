@@ -132,7 +132,7 @@ class OnlineSalesRegisterCollector:
         """Total amount of taxes."""
         
         return (self.twenty_percent_tax_calculation() + 
-                self.ten_percent_tax_calculation)
+                self.ten_percent_tax_calculation())
 
 
 if __name__ == "__main__":
