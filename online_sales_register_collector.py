@@ -32,6 +32,26 @@ class OnlineSalesRegisterCollector:
             'кефир': 10
         }
 
+    @staticmethod
+    def get_telephone_number(telephone_number):
+        """Check a telephone number.
+        
+        Raises:
+            ValueError: The telephone number is not integer.
+            ValueError: The length of telephone number is not 10.
+
+        Returns:
+            str: full telephone number, e.g. +71234567890
+        """
+        if not isinstance(telephone_number, int):
+            raise ValueError('Необходимо ввести цифры')
+        
+        if len(str(telephone_number)) != 10:
+            raise ValueError('Необходимо ввести 10 цифр после "+7"')
+        
+        return f'+7{telephone_number}'
+        
+
     @property
     def name_items(self):
         return self.__name_items
@@ -183,3 +203,25 @@ if __name__ == "__main__":
      for i in range(11)] # 70
     actual_total = register_collector_total_with_11_items_with_10.ten_percent_tax_calculation()
     assert actual_total == (70 * 11) * DISCOUNT * VAT_TAX_10 / PERCENT_100, f'{actual_total}'
+
+    # tests get_telephone_number
+    actual_10_numbers = OnlineSalesRegisterCollector.get_telephone_number(1234567890)
+    assert actual_10_numbers == '+71234567890'
+    
+    try:
+        OnlineSalesRegisterCollector.get_telephone_number([1234567890])
+    except Exception as e:
+        assert type(e).__name__ == 'ValueError'
+        assert 'Необходимо ввести цифры' in str(e)
+    
+    try:
+        OnlineSalesRegisterCollector.get_telephone_number(123456)
+    except Exception as e:
+        assert type(e).__name__ == 'ValueError'
+        assert 'Необходимо ввести 10 цифр после "+7"' in str(e)
+
+    try:
+        OnlineSalesRegisterCollector.get_telephone_number(12345678901234)
+    except Exception as e:
+        assert type(e).__name__ == 'ValueError'
+        assert 'Необходимо ввести 10 цифр после "+7"' in str(e)
