@@ -89,6 +89,12 @@ class OnlineSalesRegisterCollector:
         self.__name_items.append(name)
         self.__number_items += 1
 
+    def delete_item_from_check(self, name):
+        if name not in self.__name_items:
+            raise NameError('Позиция отсутствует в чеке')
+        self.__name_items.remove(name)
+        self.__number_items -= 1
+
     def check_amount(self):
         total = sum([self.__item_price.get(item, 0) for item in self.__name_items])
 
@@ -202,6 +208,24 @@ if __name__ == "__main__":
      for i in range(11)] # 50
     actual_total = register_collector_total_with_11_items_with_20.twenty_percent_tax_calculation()
     assert actual_total == (50 * 11) * DISCOUNT * VAT_TAX_20 / PERCENT_100, f'{actual_total}'
+
+    # tests delete_item_from_check
+    item_exits_name = 'кефир'
+    register_collector_delete_exists_items = OnlineSalesRegisterCollector()
+    register_collector_delete_exists_items.add_item_to_cheque(item_exits_name)
+    register_collector_delete_exists_items.add_item_to_cheque('чипсы') 
+    register_collector_delete_exists_items.delete_item_from_check(item_exits_name)
+    assert item_exits_name not in register_collector_delete_exists_items.name_items
+    assert register_collector_delete_exists_items.number_items == 1
+
+    register_collector_delete_exists_items = OnlineSalesRegisterCollector()
+    register_collector_delete_exists_items.add_item_to_cheque('кефир')
+    register_collector_delete_exists_items.add_item_to_cheque('чипсы') 
+    try:
+        register_collector_delete_exists_items.delete_item_from_check('wrong_name')
+    except Exception as e:
+        assert type(e).__name__ == 'NameError'
+        assert 'Позиция отсутствует в чеке' in str(e)
 
     # tests ten_percent_tax_calculation
     register_collector_total_with_2_items_with_10 = OnlineSalesRegisterCollector()
