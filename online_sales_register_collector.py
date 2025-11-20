@@ -50,7 +50,26 @@ class OnlineSalesRegisterCollector:
             raise ValueError('Необходимо ввести 10 цифр после "+7"')
         
         return f'+7{telephone_number}'
-        
+    
+    @staticmethod
+    def get_date_and_time():
+        """Split of current date into a list. 
+
+        Returns:
+            list: list of splitted of current date, 
+            e.g. ['часы: 13', 'минуты: 31', 'день: 10', 'месяц: 7', 'год: 2023']
+        """
+
+        now = datetime.datetime.now()
+        date = [
+            ['часы', lambda td: td.hour],
+            ['минуты', lambda td: td.minute],
+            ['день', lambda td: td.day],
+            ['месяц', lambda td: td.month],
+            ['год', lambda td: td.year],
+        ]
+
+        return [f'{t_name}: {fun(now)}' for (t_name, fun) in date]
 
     @property
     def name_items(self):
@@ -225,3 +244,13 @@ if __name__ == "__main__":
     except Exception as e:
         assert type(e).__name__ == 'ValueError'
         assert 'Необходимо ввести 10 цифр после "+7"' in str(e)
+
+    # tests get_date_and_time
+    now = datetime.datetime.now()
+    actual_list = OnlineSalesRegisterCollector.get_date_and_time()
+
+    assert actual_list[0] == f'часы: {now.hour}'
+    assert actual_list[1] == f'минуты: {now.minute}'
+    assert actual_list[2] == f'день: {now.day}'
+    assert actual_list[3] == f'месяц: {now.month}'
+    assert actual_list[4] == f'год: {now.year}'
