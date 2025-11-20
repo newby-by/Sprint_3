@@ -3,6 +3,8 @@ import datetime
 
 MIN_NUMBER_LETTERS_IN_NAME = 0
 MAX_NUMBER_LETTERS_IN_NAME = 40
+NUMBER_ITEMS_IN_CART_WITH_DISCOUNT = 10
+DISCOUNT = 0.9
 
 
 class OnlineSalesRegisterCollector:
@@ -44,6 +46,13 @@ class OnlineSalesRegisterCollector:
         self.__name_items.append(name)
         self.__number_items += 1
 
+    def check_amount(self):
+        total = sum([self.__item_price.get(item, 0) for item in self.__name_items])
+
+        return (total * DISCOUNT 
+                if self.__number_items > NUMBER_ITEMS_IN_CART_WITH_DISCOUNT 
+                else total)
+
 
 if __name__ == "__main__":
     register_collector = OnlineSalesRegisterCollector()
@@ -80,3 +89,21 @@ if __name__ == "__main__":
     except Exception as e:
         assert type(e).__name__ == 'NameError'
         assert 'Позиция отсутствует в товарном справочнике' in str(e)
+
+
+    # tests check_amount
+    register_collector_total_with_2_items = OnlineSalesRegisterCollector()
+    register_collector_total_with_2_items.add_item_to_cheque('чипсы') # 50
+    register_collector_total_with_2_items.add_item_to_cheque('кола') # 100
+    actual_total = register_collector_total_with_2_items.check_amount()
+    assert actual_total == (50 + 100)
+
+    register_collector_total_with_0_items = OnlineSalesRegisterCollector()
+    actual_total = register_collector_total_with_0_items.check_amount()
+    assert actual_total == 0, f'{actual_total}'
+
+    register_collector_total_with_11_items = OnlineSalesRegisterCollector()
+    [register_collector_total_with_11_items.add_item_to_cheque('чипсы') 
+     for i in range(11)] # 50
+    actual_total = register_collector_total_with_11_items.check_amount()
+    assert actual_total == (50 * 11) * DISCOUNT, f'{actual_total}'
