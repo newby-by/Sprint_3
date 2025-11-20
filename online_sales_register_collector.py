@@ -70,16 +70,6 @@ class OnlineSalesRegisterCollector:
 
         return total_with_discount * VAT_TAX_20 / PERCENT_100
 
-    """
-Пустой список ten_percent_tax. 
-Сюда метод добавляет товары из списка name_items, 
-если в словаре tax_rate у них указана ставка 10%.
-Пустой список total. Сюда метод добавляет цены товаров, 
-которые включили в ten_percent_tax.
-Метод должен вернуть общую сумму НДС для позиций чека со ставкой 10%. 
-Отталкивайся от формулы: НДС = стоимость товара * 0,1.
-При расчете не забудь учесть скидку при количестве товаров больше 10.
-    """
     def ten_percent_tax_calculation(self):
         """Calculate VAT for goods with a rate of 10 percent."""
 
@@ -92,6 +82,12 @@ class OnlineSalesRegisterCollector:
                                 else total)
 
         return total_with_discount * VAT_TAX_10 / PERCENT_100
+
+    def total_tax(self):
+        """Total amount of taxes."""
+        
+        return (self.twenty_percent_tax_calculation() + 
+                self.ten_percent_tax_calculation)
 
 
 if __name__ == "__main__":
